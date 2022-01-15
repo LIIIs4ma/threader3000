@@ -1,23 +1,54 @@
 #!/usr/bin/python3
 # Threader3000 - Multi-threader Port Scanner
 # A project by The Mayor
-# v1.0.7
-# https://github.com/dievus/threader3000
-# Licensed under GNU GPLv3 Standards.  https://www.gnu.org/licenses/gpl-3.0.en.html
+# Edited by LIII
+# v1.1.26
+# https://github.com/LIIIs4ma/threader3000
 
-
-import socket
-import os
-import signal
-import time
-import threading
-import sys
 import subprocess
+import threading
+import argparse
+import socket
+import time
+import sys
+import os
 from queue import Queue
-from datetime import datetime
 
-# Start Threader3000 with clear terminal
-subprocess.call('clear', shell=True)
+class color:
+    default = '\033[0m'
+    cyan='\033[36m'
+    red='\033[31m'
+    purple='\033[95m'
+    lightgrey='\033[37m'
+    yellow='\033[93m'
+	
+
+def parser():
+    parser = argparse.ArgumentParser(description='Multi-threaded Port Scanner')
+    parser.add_argument('-i', help = 'IP address of the target [ex: -i 10.10.10.10]')
+    parser.add_argument('-r', help = 'Specify number of retries [ex: -r 1] [default: 1, max: 3]]' , default=1)
+    parser.add_argument('-t', help = 'Specify number of thread [ex: -t 200] [default: 200, max: 250]', default=200)
+    parser.add_argument('-p', help = 'Set range of ports [ex: -p 1000] It means 0 to 1000  [default: 65536]', default=65536)
+    return parser.parse_args()
+
+def banner(args=False):
+    subprocess.call('clear', shell=True)
+    print(color.cyan+""" _   _                        _          _____  _____  _____  _____ 
+| | | |                      | |        |____ ||  _  ||  _  ||  _  |
+| |_| |__  _ __ ___  __ _  __| | ___ _ __   / /| |/' || |/' || |/' |
+| __| '_ \| '__/ _ \/ _` |/ _` |/ _ \ '__|  \ \|  /| ||  /| ||  /| |
+| |_| | | | | |  __/ (_| | (_| |  __/ | .___/ /\ |_/ /\ |_/ /\ |_/ /
+ \__|_| |_|_|  \___|\__,_|\__,_|\___|_| \____/  \___/  \___/  \___/ 
+ """+ color.default)
+    print("                Multi-threaded Port Scanner          ")
+    print("                   A project by "+color.red+"The Mayor               "+ color.default)
+    print("                    Edited by "+color.purple+"LIII-s4ma                 "+color.default)
+    print()
+    if(args and not args.i):
+        print("You can use " + color.cyan + "threader3000 -i ip" +color.default+" for set IP also.")
+        print("Check other options:" + color.cyan + "threader3000 -h" +color.default)
+    print()
+
 
 # Main Function
 def main():
@@ -25,109 +56,167 @@ def main():
     print_lock = threading.Lock()
     discovered_ports = []
 
-# Welcome Banner
-    print("-" * 60)
-    print("        Threader 3000 - Multi-threaded Port Scanner          ")
-    print("                       Version 1.0.7                    ")
-    print("                   A project by The Mayor               ")
-    print("-" * 60)
-    time.sleep(1)
-    target = input("Enter your target IP address or URL here: ")
-    error = ("Invalid Input")
-    try:
-        t_ip = socket.gethostbyname(target)
-    except (UnboundLocalError, socket.gaierror):
-        print("\n[-]Invalid format. Please use a correct IP or web address[-]\n")
-        sys.exit()
-    #Banner
-    print("-" * 60)
-    print("Scanning target "+ t_ip)
-    print("Time started: "+ str(datetime.now()))
-    print("-" * 60)
-    t1 = datetime.now()
+    args = parser()
+    banner(args)
+    target = args.i if args.i else input(color.cyan+"$"+color.default+"IP: ")
+    threadCount =  int(args.t) if int(args.t) <= 250 else 250
+    portRange = int(args.p) if int(args.p) <= 65536 else 65536
+    retryCount = int(args.r) if int(args.r) <= 3 else 3 
 
-    def portscan(port):
+    def checkTarget(target):
+        try:
+            return socket.gethostbyname(target)
+        except:
+            banner(False)
+            print(color.red + "[!] " + color.lightgrey + "Invalid format. Please use a correct IP or web address!")
+            print()
+            sys.exit()
 
-       s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-       
-       try:
-          portx = s.connect((t_ip, port))
-          with print_lock:
-             print("Port {} is open".format(port))
-             discovered_ports.append(str(port))
-          portx.close()
+    targetIP = checkTarget(target)
 
-       except (ConnectionRefusedError, AttributeError, OSError):
-          pass
+    def isPortOpen(port):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        try:
+            portx = s.connect((targetIP, port))
+            with print_lock:
+                if str(port) not in discovered_ports:
+                    return True
+            portx.close()
+        except (ConnectionRefusedError, AttributeError, OSError):
+            return False
 
+    def printOpenPort(port):
+        print(color.red + "[!] " + color.lightgrey + "Port {} is open".format(port))
+        discovered_ports.append(str(port))
+
+
+    # Threading
     def threader():
-       while True:
-          worker = q.get()
-          portscan(worker)
-          q.task_done()
-      
+        while True:
+            worker = q.get()
+
+            if(isPortOpen(worker)):
+                printOpenPort(worker)
+
+            q.task_done()
+          
     q = Queue()
      
-    #startTime = time.time()
-     
-    for x in range(200):
-       t = threading.Thread(target = threader)
-       t.daemon = True
-       t.start()
+    def scanToIP(header=True):
+        try:
+            if header:
+                print()
+                print(color.lightgrey + "Scanning target: " +  targetIP)
+                print("-" * 67)
 
-    for worker in range(1, 65536):
-       q.put(worker)
+            for r in range(retryCount):
+                for i in range(threadCount):
+                    t = threading.Thread(target = threader)
+                    t.daemon = True
+                    t.start()
 
-    q.join()
+                for worker in range(1, portRange):
+                    q.put(worker)
+                    
+                time.sleep(1)
+            
 
-    t2 = datetime.now()
-    total = t2 - t1
-    print("Port scan completed in "+str(total))
-    print("-" * 60)
-    print("Threader3000 recommends the following Nmap scan:")
-    print("*" * 60)
-    print("nmap -p{ports} -sV -sC -T4 -Pn -oA {ip} {ip}".format(ports=",".join(discovered_ports), ip=target))
-    print("*" * 60)
-    nmap = "nmap -p{ports} -sV -sC -T4 -Pn -oA {ip} {ip}".format(ports=",".join(discovered_ports), ip=target)
-    t3 = datetime.now()
-    total1 = t3 - t1
+            q.join()
+        except KeyboardInterrupt:
+              print()
+              print(color.red + "[!] " + color.lightgrey + "I was scanning :( Good bye!")
+              quit()
 
-#Nmap Integration (in progress)
+    scanToIP()
 
+    while True:
+        if (not discovered_ports):
+            print(color.red + "[!] " + color.default + "There is no open port.")
+        print()
+        
+        again = input(color.yellow + "[?] " + color.default + "Would you like to try one more time (y/n): ")
+        if again.lower() == 'y' or again.lower() == 'yes':
+            retryCount = 1
+            banner(args)
+            print()
+            print(color.lightgrey + "Scanning target: " +  targetIP)
+            print("-" * 67)
+            for i in discovered_ports:
+                print(color.red + "[!] " + color.lightgrey + "Port {} is open".format(i))
+
+            scanToIP(header=False)
+        else:
+            break
+    
+    def choices():
+        print(color.cyan+"Choices:")
+        if discovered_ports:
+            print(color.cyan+"1: "+color.default+"sudo nmap -p{ports} -sV ".format(ports=",".join(discovered_ports))+color.red+"-sS -A"+color.default+" -T4 -Pn -oN {ip} {ip}".format(ip=target))
+            print(color.cyan+"2: "+color.default+"nmap -p{ports} -sV ".format(ports=",".join(discovered_ports))+color.red+"-sC -A"+color.default+" -T4 -Pn -oN {ip} {ip}".format(ip=target))
+        print(color.cyan+"3: "+color.default+"sudo nmap "+color.red+"-p- "+color.default+"-sV "+color.red+"-sS "+color.default+"-T4 -Pn -oN {ip} {ip}".format(ip=target))
+        print(color.cyan+"4: "+color.default+"nmap "+color.red+"-p- "+color.default+"-sV "+color.red+"-sC "+color.default+"-T4 -Pn -oN {ip} {ip}".format(ip=target))
+        print()
+        print(color.cyan+"Open ports:"+color.default)
+        if discovered_ports:
+            print("{ports}".format(ports=",".join(discovered_ports)))
+        else:
+            print(color.red + "[!] " + color.default + "There is no open port. Go to Road 3 or 4.")
+        print()
+       
+       
     def automate():
-       choice = '0'
-       while choice =='0':
-          print("Would you like to run Nmap or quit to terminal?")
-          print("-" * 60)
-          print("1 = Run suggested Nmap scan")
-          print("2 = Run another Threader3000 scan")
-          print("3 = Exit to terminal")
-          print("-" * 60)
-          choice = input("Option Selection: ")
-          if choice == "1":
-             try:
-                print(nmap)
+        banner(args)
+        choices()
+       
+        nmaps = [
+                '',
+                "sudo nmap -p{ports} -sV -sS -A -T4 -Pn -oN {ip} {ip}".format(ports=",".join(discovered_ports), ip=target),
+                "nmap -p{ports} -sV -sC -A -T4 -Pn -oN {ip} {ip}".format(ports=",".join(discovered_ports), ip=target),
+                "sudo nmap -p- -sV -sS -T4 -Pn -oN {ip} {ip}".format(ports=",".join(discovered_ports), ip=target),
+                "nmap -p- -sV -sC -T4 -Pn -oN {ip} {ip}".format(ports=",".join(discovered_ports), ip=target)
+            ]
+
+        def nmapper(road):
+            try:
+                if int(road) > 4 or 1 > int(road):
+                    banner()
+                    choices()
+                    print(color.red + "[!] " + color.default + "Unknown road. [ex: "+color.cyan+"$"+color.default+"ROAD: 3]")
+                    print()
+                    return
                 os.mkdir(target)
                 os.chdir(target)
-                os.system(nmap)
-                #convert = "xsltproc "+target+".xml -o "+target+".html"
-                #os.system(convert)
-                t3 = datetime.now()
-                total1 = t3 - t1
-                print("-" * 60)
-                print("Combined scan completed in "+str(total1))
-                print("Press enter to quit...")
-                input()
-             except FileExistsError as e:
-                print(e)
+                banner()
+                print(color.cyan+"$ "+color.default+nmaps[road])
+                print()
+                os.system(nmaps[road])
+                return 'q'
+            except FileExistsError as e:
+                print()
+                print(color.red + "[!] " + color.default + str(e) + ". Nmap can't write to file.")
                 exit()
-          elif choice =="2":
-             main()
-          elif choice =="3":
-             sys.exit()
-          else:
-             print("Please make a valid selection")
-             automate()
+
+        while True:
+            try:
+                print(color.cyan+"$"+color.default+"ROAD: ",end="")
+                choice = input()
+
+                if choice.isnumeric():
+                    choice = int(choice)
+                else:
+                    banner()
+                    choices()
+                    print(color.red + "[!] " + color.default + "Unknown road. [ex: "+color.cyan+"$"+color.default+"ROAD: 3]")
+                    print()
+                    continue
+
+                if nmapper(choice):
+                    exit()
+            except KeyboardInterrupt:
+                print()
+                print("Goodbye!")
+                quit()
+
     automate()
 
 if __name__ == '__main__':
