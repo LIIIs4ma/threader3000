@@ -4,6 +4,7 @@
 
 Threader3000 is a script written in Python3 that allows multi-threaded port scanning. 
 
+With the one retry a full port scan can take as little as **15 seconds**, but at max should take less than 1 minute 30 seconds depending on your internet connection.
 
 ## Installation
 
@@ -24,15 +25,7 @@ threader3000 -i 10.10.10.10 -p 1023
 
 ## Screenshots
 
-![image](https://user-images.githubusercontent.com/12685802/149635525-177d34c9-d946-406f-9dba-a48cbde8cffb.png)
-
-![image](https://user-images.githubusercontent.com/12685802/149635615-cb135551-7488-49ed-9cf8-8c3a11815b79.png)
-
-![image](https://user-images.githubusercontent.com/12685802/149635624-e6b20e7a-9198-452b-8aa3-add95665607f.png)
-
-![image](https://user-images.githubusercontent.com/12685802/149635651-0269deb8-ca06-4a18-ac83-b2f9a8e28e46.png)
-
-![image](https://user-images.githubusercontent.com/12685802/149635989-01b85ac5-183f-4443-9f80-6a05e2c23c40.png)
+![image](https://user-images.githubusercontent.com/12685802/149636032-6227d8e0-7bae-43d5-93e9-082e1b5a2fa6.png)
 
 
 ## FAQ
