@@ -1,16 +1,13 @@
 # Threader3000 - LIII Edition
-### Multi-threaded Python Port Scanner with Nmap integration for use on Linux or Windows
+
+![visitor badge](https://visitor-badge.glitch.me/badge?page_id=LIIIs4ma.threader3000) ![language](https://img.shields.io/badge/language-python3-3572A5)
 
 Threader3000 is a script written in Python3 that allows multi-threaded port scanning. 
 
-## Requirements
-
-- Python3 must be installed on your system in order to function
-- Pip3 for installation via PyPi repository
 
 ## Installation
 
-```bash
+```
 git clone https://github.com/LIIIs4ma/threader3000.git
 cd /threader3000
 sudo ln -s threader3000.py /usr/local/bin/threader3000
