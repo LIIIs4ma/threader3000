@@ -11,7 +11,7 @@ Pip3 for installation via PyPi repository
 ## Installation
 
 ```bash
-git clone https://github.com/LIIIs4ma/threader3000.git  # to save the program to your machine, or utilize the download option
+git clone https://github.com/LIIIs4ma/threader3000.git
 cd /threader3000
 sudo ln -s threader3000.py /usr/local/bin/threader3000
 ```
