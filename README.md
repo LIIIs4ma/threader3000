@@ -22,6 +22,19 @@ threader3000 -i 10.10.10.10 -r 3
 threader3000 -i 10.10.10.10 -p 1023
 ```
 
+## Screenshots
+
+![image](https://user-images.githubusercontent.com/12685802/149635525-177d34c9-d946-406f-9dba-a48cbde8cffb.png)
+
+![image](https://user-images.githubusercontent.com/12685802/149635615-cb135551-7488-49ed-9cf8-8c3a11815b79.png)
+
+![image](https://user-images.githubusercontent.com/12685802/149635624-e6b20e7a-9198-452b-8aa3-add95665607f.png)
+
+![image](https://user-images.githubusercontent.com/12685802/149635651-0269deb8-ca06-4a18-ac83-b2f9a8e28e46.png)
+
+![image](https://user-images.githubusercontent.com/12685802/149635989-01b85ac5-183f-4443-9f80-6a05e2c23c40.png)
+
+
 ## FAQ
 
 **Can I use this tool to scan Facebook or other websites I don't have permission to scan?**
