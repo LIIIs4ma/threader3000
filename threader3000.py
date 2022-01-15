@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 # Threader3000 - Multi-threader Port Scanner
-# A project by The Mayor
-# Edited by LIII
+# A project by LIII-s4ma 
 # v1.1.26
 # https://github.com/LIIIs4ma/threader3000
+#
+# Original project by The Mayor
+# https://github.com/dievus/threader3000
 
 import subprocess
 import threading
@@ -14,6 +16,7 @@ import sys
 import os
 from queue import Queue
 
+
 class color:
     default = '\033[0m'
     cyan='\033[36m'
@@ -22,7 +25,6 @@ class color:
     lightgrey='\033[37m'
     yellow='\033[93m'
 	
-
 def parser():
     parser = argparse.ArgumentParser(description='Multi-threaded Port Scanner')
     parser.add_argument('-i', help = 'IP address of the target [ex: -i 10.10.10.10]')
