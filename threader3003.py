@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 # Threader3000 - Multi-threader Port Scanner
 # A project by LIII-s4ma 
-# v1.1.26
-# https://github.com/LIIIs4ma/threader3000
+# v1.0.1
+# https://github.com/LIIIs4ma/threader3003
 #
 # Original project by The Mayor
 # https://github.com/dievus/threader3000
@@ -35,20 +35,20 @@ def parser():
 
 def banner(args=False):
     subprocess.call('clear', shell=True)
-    print(color.cyan+""" _   _                        _          _____  _____  _____  _____ 
-| | | |                      | |        |____ ||  _  ||  _  ||  _  |
-| |_| |__  _ __ ___  __ _  __| | ___ _ __   / /| |/' || |/' || |/' |
-| __| '_ \| '__/ _ \/ _` |/ _` |/ _ \ '__|  \ \|  /| ||  /| ||  /| |
-| |_| | | | | |  __/ (_| | (_| |  __/ | .___/ /\ |_/ /\ |_/ /\ |_/ /
- \__|_| |_|_|  \___|\__,_|\__,_|\___|_| \____/  \___/  \___/  \___/ 
+    print(color.cyan+"""  _   _                        _          _____  ___   ___ _____ 
+ | |_| |__  _ __ ___  __ _  __| | ___ _ _|___ / / _ \ / _ \___ / 
+ | __| '_ \| '__/ _ \/ _` |/ _` |/ _ \ '__||_ \| | | | | | ||_ \ 
+ | |_| | | | | |  __/ (_| | (_| |  __/ |  ___) | |_| | |_| |__) |
+  \__|_| |_|_|  \___|\__,_|\__,_|\___|_| |____/ \___/ \___/____/ 
+                                                                 
  """+ color.default)
-    print("                Multi-threaded Port Scanner          ")
-    print("                   A project by "+color.red+"The Mayor               "+ color.default)
-    print("                    Edited by "+color.purple+"LIII-s4ma                 "+color.default)
+    print("                   Multi-threaded Port Scanner          ")
+    print("                      A project by "+color.red+"The Mayor               "+ color.default)
+    print("                       Edited by "+color.purple+"LIII-s4ma                 "+color.default)
     print()
     if(args and not args.i):
-        print("You can use " + color.cyan + "threader3000 -i ip" +color.default+" for set IP also.")
-        print("Check other options:" + color.cyan + "threader3000 -h" +color.default)
+        print("You can use " + color.cyan + "threader3003 -i ip" +color.default+" for set IP also.")
+        print("Check other options:" + color.cyan + "threader3003 -h" +color.default)
     print()
 
 
