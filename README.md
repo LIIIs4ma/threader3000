@@ -14,7 +14,7 @@ cd /opt
 git clone https://github.com/LIIIs4ma/threader3003.git
 cd threader3003
 chmod +x threader3003.py
-sudo ln -s $(pwd)/threader3003.py /usr/local/bin/threader3003
+ln -s $(pwd)/threader3003.py /usr/local/bin/threader3003
 ```
 
 ## Options
@@ -47,3 +47,7 @@ threader3003 -i 10.10.10.10 -p 1023
 ## Can I use this tool to scan Facebook or other websites I don't have permission to scan?
 
 *No. That would be illegal.  This tool is under a free license for use, however it is up to the user to observe all applicable laws and appropriate uses for this tool.  The creator does not condone, support, suggest, or otherwise promote unethical or illegal behavior.  You use this tool at your own risk, and under the assumption that you are utilizing it against targets and infrastructure to which you have permission to do so.  Any use otherwise is at your peril and against the terms of use for the tool.*
+
+## Tested on
+
+Linux kali 5.10.0-kali9-amd64 #1 SMP Debian 5.10.46-4kali1 (2021-08-09) x86_64 GNU/Linux
