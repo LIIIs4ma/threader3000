@@ -10,8 +10,10 @@ A script written in Python3 that allows multi-threaded full port scanning in **1
 ## Installation
 
 ```
+cd /opt
 git clone https://github.com/LIIIs4ma/threader3003.git
 cd threader3003
+chmod +x threader3003.py
 sudo ln -s $(pwd)/threader3003.py /usr/local/bin/threader3003
 ```
 
