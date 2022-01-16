@@ -12,7 +12,7 @@ A script written in Python3 that allows multi-threaded full port scanning in **1
 ```
 git clone https://github.com/LIIIs4ma/threader3003.git
 cd threader3003
-sudo ln -s threader3003.py /usr/local/bin/threader3003
+sudo ln -s $(pwd)/threader3003.py /usr/local/bin/threader3003
 ```
 
 ## Options
