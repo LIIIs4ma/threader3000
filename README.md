@@ -46,6 +46,7 @@ threader3003 -i 10.10.10.10 -p 1023
 - Show which retry you are currently on 
 - No open port scan flags has verbose
 - Would you like to try well-known ports again?
+- If KeyboardInterrupt occurs when scanning. Ask to user: Would you like to nmap founded open ports?
 - OOP
 
 ## Can I use this tool to scan Facebook or other websites I don't have permission to scan?
