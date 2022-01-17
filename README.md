@@ -43,6 +43,9 @@ threader3003 -i 10.10.10.10 -p 1023
 ## To-Do
 
 - Automatically run on open ports
+- Show which retry you are currently on 
+- No open port scan flags has verbose
+- OOP
 
 ## Can I use this tool to scan Facebook or other websites I don't have permission to scan?
 
