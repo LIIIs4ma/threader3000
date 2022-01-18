@@ -42,6 +42,7 @@ threader3003 -i 10.10.10.10 -p 1023
 
 ## To-Do
 
+- Fix the no open port nmap search 
 - Automatically run on open ports
 - Show which retry you are currently on 
 - No open port scan flags has verbose
